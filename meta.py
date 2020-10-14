@@ -13,9 +13,9 @@ db = MongoEngine()
 db.init_app(app)
 
 class Meta(db.Document):
-    asin = db.IntegerField()
+    asin = db.IntField()
     title = db.StringField()
-    price = db.IntegerField()
+    price = db.IntField()
     imURL = db.URLField()
     also_bought = db.ListField(db.StringField())
     also_viewed = db.ListField(db.StringField())
