@@ -1,8 +1,7 @@
 from flask_restful import Resource, reqparse
-from flask_jwt import jwt_required
-from model import ReviewsModel
+from books.model import ReviewsModel
 
-class Review(Resouce):
+class Review(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('asin',
         type=vars,
@@ -43,7 +42,7 @@ class Review(Resouce):
         return review.json(), 201
 
 
-class ReviewList(resource):
+class ReviewList(Resource):
 
     def get(self, asin):
         reviews = ReviewsModel.find_by_asin(asin)
