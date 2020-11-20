@@ -1,7 +1,7 @@
 from db import db
 from datetime import datetime
 
-class ReviewsModel(db.Model):
+class Reviews(db.Model):
     id = db.Column(db.Integer, nullable=False, primary_key=True)
     asin = db.Column(db.VARCHAR(100))
     helpful = db.Column(db.VARCHAR(100))
@@ -45,6 +45,10 @@ class ReviewsModel(db.Model):
     @classmethod
     def find_by_asin(cls, asin):
         return cls.query.filter_by(asin=asin).all()
+
+    @classmethod
+    def find_by_id(cls, id):
+        return cls.query.filter_by(id=id).all()
 
     def save_to_db(self):
         db.session.add(self)
