@@ -15,12 +15,25 @@ client = pymongo.MongoClient(mongo_uri)
 
 # currently tested on localhost -- CHANGE database & collection names for EC2
 
+# Get all books
+@app.route('/allbooks',methods=["GET"])
+def get_allbooks_paginated():
+    db = client['meta']
+    col= db['newmetadata']
+    page = request.args.get('page')
+    if page == None:
+        page = 2
+    page = int(page)
+    response = col.find().skip(page).limit(8)
+    #return {'message':"found","books":str(list(response))},201
+    return dumps(response)
+
 # Get metadata of a book
 # asin -- make sure not in form of a string
 @app.route('/metadata/<asin>', methods=['GET'])
 def query_meta(asin):
-    db = client['MetaData'] # change to meta from MetaData for EC2 
-    collection = db['metadata'] # change to newmetadata from metadata for EC2
+    db = client['meta'] # change to meta from MetaData for EC2 
+    collection = db['newmetadata'] # change to newmetadata from metadata for EC2
     v = collection.find_one({"asin": asin})
     try:
         if asin == v["asin"]:
@@ -34,8 +47,8 @@ def query_meta(asin):
 @app.route('/bookPost', methods=["POST"])
 def post_books():
     data = request.json
-    db = client['MetaData']
-    collection = db['metadata']
+    db = client['meta']
+    collection = db['newmetadata']
     collection1 = db['logs'] # Collection for logs -- create one in EC2 instance if haven't
 
     title = request.form.get("title")
@@ -57,33 +70,23 @@ def post_books():
         return {'message': 'Book added', 'data': str(post_id)}, 201
 
 
-# searching for a book by title
-@app.route('/bookSearch', methods=["POST"])
+# Searching for a book by author and title
+@app.route('/bookSearch', methods=["GET"])
 def search_books():
-    data = request.json
-    
-    db = client['MetaData']
-    collection = db['metadata']
-    collection1 = db['logs']
-
-    keyword = request.form.get("keyword")
-
-    v = collection.find_one({"title": data["title"]})
-    try:
-        if data["title"] == v["title"]:
-            response_code = 201
-            add_log(request.method, request.url, {"search_keyword": keyword}, response_code, collection1)
-            return {'message': 'Book exists.', 'data': str(v)}, 201
-    except:
-        response_code = 404
-        add_log(request.method, request.url, {"search_keyword": keyword}, response_code, collection1)   
-        return {'message': 'Book does not exist', 'data': {}}, 404
+    title = request.args.get('title')
+    db = client['meta']
+    collection = db['newmetadata']
+    v = collection.find_one({"title":str(title)})
+    if v!=None:
+        return dumps(v)
+    else:
+  return {'message': collection, 'data': {}}, 404
     
 # Deleting a book
 @app.route('/metadelete/<asin>', methods=['DELETE'])
 def delete_record(asin):
-    db = client['MetaData']
-    collection = db['metadata']
+    db = client['meta']
+    collection = db['newmetadata']
     collection1 = db['logs']
 
     data = request.json
@@ -99,11 +102,12 @@ def delete_record(asin):
         add_log(request.method, request.url, {"book does not exist so not deleted"}, response_code, collection1)   
         return {'message': 'Book does not exist so cannot delete metadata', 'data': {}}, 404
 
+
 # -- FIX THIS
 # Adding a review
 @app.route("/book/<asin>", methods=["POST"])
 def review(asin):
-    db = client['MetaData']
+    db = client['meta']
     collection1 = db['logs']
 
     rating = request.form.get("rating")
@@ -118,7 +122,7 @@ def review(asin):
 # Delete a review
 @app.route('/reviewdelete/<asin>', methods=['DELETE'])
 def delete_review(asin):
-    db = client['MetaData']
+    db = client['meta']
     collection1 = db['logs']
 
     data = request.json
