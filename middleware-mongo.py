@@ -39,24 +39,23 @@ def query_meta(asin):
     except:
         return {'message': "Book's metadata does not exists", 'data': {}}, 404
 
-# Add a new book
+# Add a new book -- needs everything from frontend (asin & title & price & category)
 @app.route('/bookPost', methods=["POST"])
 def post_books():
     asin = request.args.get('asin')
+    title = request.args.get('title')
+    price = request.args.get('price')
+    category = request.args.get('category')
 
     db = client['meta']
     collection = db['newmetadata']
-    collection1 = db['logs'] # Collection for logs -- create one in EC2 instanc$
-
-    # title = request.form.get("title")
-    # price = request.form.get("price")
-    # category = request.form.get("category")
+    collection1 = db['logs'] # Collection for logs -- create one in EC2 instance
 
     v = collection.find_one({"asin": asin})
     try:
         if asin == v["asin"]:
             response_code = 404
-            # add_log(request.method, request.url,{"book_information": {"title": title, "price": price, "category": category}}, response_code, collection1)   
+            add_log(request.method, request.url,{"book_information": {"title": title, "price": price, "category": category}}, response_code, collection1)    
             return {'message': 'Book exists. Please select another one!', 'data': {}}, 404
     except:
         # add into metadata collection
@@ -64,10 +63,10 @@ def post_books():
         vv = collection.find_one({"asin": asin})
         response_code = 201
         # add into logs collection
-        # add_log(request.method, request.url,{"book_information": {"title":  title, "price": price, "category": category}}, response_code, collection1)
+        add_log(request.method, request.url,{"book_information": {"title": title, "price": price, "category": category}}, response_code, collection1) 
         return {'message': 'Book added', 'data': str(vv)}, 201
 
-
+# searches for a book - need page & EITHER title OR author OR category
 @app.route('/bookSearch', methods=["GET"])
 def search_books():
     page = request.args.get('page')
@@ -78,43 +77,57 @@ def search_books():
     db = client['meta']
     collection = db['newmetadata']
     collection1 = db['logs']
-     if(request.args.get("title") != None):
+    if(request.args.get("title") != None):
         v = collection.find_one({"title":request.args.get("title")})
-        response_code=201
-        #add_log(request.method, request.url,{"book_information": {"title searched": request.args.get("title")}}, response_code, collection1)
-        return str(v)
+        if v != None:
+            response_code=201
+            add_log(request.method, request.url,{"book_information": {"title searched": request.args.get("title")}}, response_code, collection1)
+            return dumps(v)
+        else:     
+            response_code=404
+            add_log(request.method, request.url,{"book_information": {"title searched": request.args.get("title")}}, response_code, collection1)
+            return {'message': 'Book does not exists!', 'data': {}}, 404
     if(request.args.get("author") != None):
-        response_code=201
-        #add_log(request.method, request.url,{"book_information": {"author searched": request.args.get("author")}}, response_code, collection1)
-        v = collection.find({"author":request.args.get("author")}) # add .skip($
-        return dumps(v)
+        v = collection.find({"author":request.args.get("author")}) # add .skip(page).limit(8)
+        if v != None:
+            response_code=201
+            add_log(request.method, request.url,{"book_information": {"author searched": request.args.get("title")}}, response_code, collection1)
+            return dumps(v)
+        else:     
+            response_code=404
+            add_log(request.method, request.url,{"book_information": {"author searched": request.args.get("title")}}, response_code, collection1)
+            return {'message': 'Book does not exists!', 'data': {}}, 404
     if(request.args.get("category") != None):
         v = collection.find({"categories": {"$elemMatch":{"$elemMatch":{"$in":[request.args.get("category")]}}}}).skip(page).limit(8)
-        response_code=201
-        #add_log(request.method, request.url,{"book_information": {"category searched": request.args.get("category")}}, response_code, collection1)
-        return dumps(v)
+        if(v.count() == 0):
+            response_code=404
+            add_log(request.method, request.url,{"book_information": {"category searched": request.args.get("category")}}, response_code, collection1)
+            return {'message': 'Book does not exists!', 'data': {}}, 404
+        if(v != None):
+            response_code=201
+            add_log(request.method, request.url,{"book_information": {"category searched": request.args.get("category")}}, response_code, collection1)
+            return dumps(v)
     else:
         return {'message': "Error"}, 404
 
-# Deleting a book
+# Deleting a book -- need asin
 @app.route('/metadelete', methods=['DELETE'])
 def delete_record():
     db = client['meta']
-    collection = db['newmetadata']
+    collection= db['newmetadata']
     collection1 = db['logs']
 
-    #data = request.json
     asin1 = request.args.get('asin')
     v = collection.find_one({"asin": asin1})
-     try:
+    try:
         if asin1 == v["asin"]:
             collection.remove({"asin": asin1})
             response_code = 201
-            # add_log(request.method, request.url,{"book deleted": str(v)}, response_code, collection1)
+            add_log(request.method, request.url,{"book deleted": str(v)}, response_code, collection1)
             return {'message': 'Deleted metadata of book', 'data': str(v)}, 201
     except:
         response_code = 404
-        # add_log(request.method, request.url, {"book does not exist so not deleted": str(v)}, response_code, collection1)
+        add_log(request.method, request.url, {"book does not exist so not deleted": asin1}, response_code, collection1)
         return {'message': 'Book does not exist so cannot delete metadata', 'data': {}}, 404
 
 if __name__ == "__main__":

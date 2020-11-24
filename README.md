@@ -164,7 +164,7 @@
 
 - **URL Params**
   **Required:**
-  `asin=[int]`
+  `asin=[int] AND title=[String] AND price=[float] AND category=[String]`
 
 - **Success Response:**
 
@@ -176,7 +176,7 @@
   - **Code:** 404 <br />
     **Content:** `"data": {}, "message": "Book exists. Please select another one!"`
 
-## **Searching for a book based on title / author**
+## **Searching for a book based on title / author / category**
 
 - **URL:**
   `/bookSearch`
@@ -186,7 +186,7 @@
 
 - **URL Params**
   **Required:**
-  `title=[String]`
+  `page=[int] AND EITHER title=[String] OR title=[String] OR category=[String]`
 
 - **Success Response:**
 
@@ -196,7 +196,7 @@
 - **Error Response:**
 
   - **Code:** 404 <br />
-    **Content:** `"data": {}, "message": "Book does not exist"`
+    **Content:** `{"message": "Book does not exists!", "data": {}}`
 
 ## **Deleting a book**
 
