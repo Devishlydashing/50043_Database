@@ -1,54 +1,11 @@
 # 50.043 Databases and Big Data Systems: Group Project
-# Automation Script
-# Downloads required libraries and creates required ec2 instances
+# Creates required ec2 instances
 #
 # Group 08
 
 import boto3
 import os
 import config
-
-print("=====================")
-print("|     STARTING...   |")
-print("=====================")
-
-# install python3 and pip3
-print("\nUpdating package information\n---")
-os.system('sudo apt-get update')
-print("\nInstalling python3, please wait...\n---")
-os.system('sudo apt -y  install python3')
-print("\nInstalling pip3, please wait...\n---")
-os.system('sudo apt -y install python3-pip')
-
-# install unzip
-print("\nInstalling unzip, please wait...\n---")
-os.system('sudo apt -y install unzip')
-
-# install boto3
-print("\nInstalling boto3 library, please wait...\n---")
-os.system('python3 -m pip install boto3')
-
-# install aws-cli
-print("\nInstaling aws-cli, please wait...\n---")
-os.system('sudo wget https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -O awscliversion2.zip')
-os.system('unzip awscliversion2.zip')
-os.system('sudo ./aws/install')
-
-# install terraform
-print("\nInstalling Terraform, please wait...\n---")
-os.system('wget https://releases.hashicorp.com/terraform/0.13.5/terraform_0.13.5_linux_amd64.zip')
-os.system('sudo unzip terraform_0.13.5_linux_amd64.zip')
-os.system('sudo mv terraform /usr/bin/')
-
-# configure aws
-print("\nAWS CONFIGURATION: Please input the necessary information.\n---")
-os.system('aws configure')
-
-# set up ec2
-print("\n\n\n=======================")
-print("| EC2 INITIALIZING... |")
-print("=======================")
-
 
 # obtain configuration
 access_key = config.access_key
@@ -83,7 +40,7 @@ outfile.close()
 os.system('chmod 400 ec2-group08-keypair.pem')
 
 # create ec2 instances (using terraform)
-print("Creating ec2 instances...")
+print("Creating ec2 instances... This might take awhile...")
 
 #instances = ec2.create_instances(
 #	ImageId=ami,
@@ -151,6 +108,9 @@ with open('output.tf', 'w') as f:
 
 os.system('terraform plan')
 os.system('echo "yes" | terraform apply')
+
+# store ec2 instance ip addresses in textfile
+os.system('terraform output | sudo tee ip.txt')
 
 
 
