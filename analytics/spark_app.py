@@ -1,5 +1,7 @@
 import os
 import time
+from operator import add
+from pathlib import Path
 
 from pyspark import ml
 from pyspark.ml.feature import CountVectorizerModel
@@ -28,8 +30,73 @@ def show_df(df, no_rows_to_show):
 
 def load_data(path):
     # df = spark.read.load(path, format="csv")
-    df = spark.read.option("header", True).csv(path)
-    return df
+    file_type = (Path(path).suffix)
+    if file_type == ".csv":
+        df_reviews = spark.read.option("header", True).csv(path)
+        return df_reviews
+
+    elif file_type == ".json":
+        df_meta = spark.read.json(path)
+        return df_meta
+
+def export_results():
+    # with Timer("Exporting results analytics results to HDFS"):
+        # df
+    return
+
+def tokenize(text):
+    return text.strip().lower().split()
+
+
+def get_review_length(text):
+    return len(tokenize(text))
+
+def map_fn_pearson(pair):
+    x, y = pair
+    return [
+        ("n", 1),
+        ("xy", x * y),
+        ("x", x),
+        ("y", y),
+        ("x_square", x ** 2),
+        ("y_square", y ** 2)
+    ]
+
+def apply_pearson_formula(result_list):
+    sums = {key: value for key, value in result_list}
+    assert set(sums.keys()) == {"n", "xy", "x", "y", "x_square", "y_square"}
+
+    top = (sums["n"] * sums["xy"]) - (sums["x"] * sums["y"])
+    bottom_left = ((sums["n"] * sums["x_square"]) - sums["x"] ** 2) ** 0.5
+    bottom_right = ((sums["n"] * sums["y_square"]) - sums["y"] ** 2) ** 0.5
+    return top / (bottom_left * bottom_right)
+
+def map_reduce_pearson(rdd):
+    rdd = rdd.flatMap(map_fn_pearson)
+    rdd = rdd.reduceByKey(add)
+    return apply_pearson_formula(rdd.collect())
+
+def pearson_price_vs_review_length(df_meta, df_reviews):
+    df_meta = df_meta.select(["asin", "price"])
+    df_reviews = df_reviews.select(["asin", "reviewText"])
+    df = df_meta.join(df_reviews, on="asin", how="inner")
+    df = df.drop("asin")
+    df = df.dropna()
+
+    df.show()
+
+    rdd_price_reviewText = df.rdd
+    rdd_price_reviewLength = rdd_price_reviewText.mapValues(get_review_length)
+
+    with Timer("Map reduce pearson correlation"):
+        pearson_value = map_reduce_pearson(rdd_price_reviewLength)
+
+    print("Correlation value:", pearson_value)
+
+    with open("results_pearson.txt", "w") as f:
+        f.write("Pearson Correlation between Price & Average Review Length: " + str(pearson_value))
+
+    return pearson_value
 
 def sparse2dict(vec, idx2word):
     idxs = vec.indices
@@ -73,7 +140,11 @@ if __name__ == "__main__":
         spark = SparkSession.builder.master("local[*]").getOrCreate()
         print("Running spark_app.py")
 
-        df_reviews = load_data("kindle_reviews.csv") #specify path
-        # df_reviews.show(5)
-    
+        df_reviews = load_data("./output/mysql_reviews_data.csv")
+        df_meta = load_data("./output/mongo_data.json")
+        
+        df_reviews.show(5)
+        df_meta.show(5)
+
+        pearson_value = pearson_price_vs_review_length(df_meta, df_reviews)
         df_tfidf = tfidf_review_text(df_reviews)
