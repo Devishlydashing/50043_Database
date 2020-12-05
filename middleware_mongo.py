@@ -78,7 +78,8 @@ def search_books():
     collection = db['newmetadata']
     collection1 = db['logs']
     if(request.args.get("title") != None):
-        v = collection.find_one({"title":request.args.get("title")})
+        mytitle = request.args.get("title")
+        v = collection.find_one({"title":{'$regex': mytitle, '$options': 'i'}})
         if v != None:
             response_code=201
             add_log(request.method, request.url,{"book_information": {"title searched": request.args.get("title")}}, response_code, collection1)
@@ -88,7 +89,8 @@ def search_books():
             add_log(request.method, request.url,{"book_information": {"title searched": request.args.get("title")}}, response_code, collection1)
             return {'message': 'Book does not exists!', 'data': {}}, 404
     if(request.args.get("author") != None):
-        v = collection.find({"author":request.args.get("author")}) # add .skip(page).limit(8)
+        myauthor = request.args.get("author")
+        v = collection.find({"author":{'$regex': myauthor, '$options': 'i'}}) # add .skip(page).limit(8)
         if v != None:
             response_code=201
             add_log(request.method, request.url,{"book_information": {"author searched": request.args.get("title")}}, response_code, collection1)
@@ -131,4 +133,4 @@ def delete_record():
         return {'message': 'Book does not exist so cannot delete metadata', 'data': {}}, 404
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
