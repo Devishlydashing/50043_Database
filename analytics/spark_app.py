@@ -16,7 +16,7 @@ class Timer(object):
 
     def __enter__(self):
         self.start = time.time()
-        print("Start timer:", self.name)
+        print("\nStart timer:", self.name)
         
     def __exit__(self, type, value, traceback):
         duration = time.time() - self.start
@@ -29,7 +29,6 @@ def show_df(df, no_rows_to_show):
         print(r)
 
 def load_data(path):
-    # df = spark.read.load(path, format="csv")
     file_type = (Path(path).suffix)
     if file_type == ".csv":
         df_reviews = spark.read.option("header", True).csv(path)
@@ -39,10 +38,6 @@ def load_data(path):
         df_meta = spark.read.json(path)
         return df_meta
 
-def export_results():
-    # with Timer("Exporting results analytics results to HDFS"):
-        # df
-    return
 
 def tokenize(text):
     return text.strip().lower().split()
@@ -83,18 +78,11 @@ def pearson_price_vs_review_length(df_meta, df_reviews):
     df = df.drop("asin")
     df = df.dropna()
 
-    df.show()
-
     rdd_price_reviewText = df.rdd
     rdd_price_reviewLength = rdd_price_reviewText.mapValues(get_review_length)
 
     with Timer("Map reduce pearson correlation"):
         pearson_value = map_reduce_pearson(rdd_price_reviewLength)
-
-    print("Correlation value:", pearson_value)
-
-    with open("results_pearson.txt", "w") as f:
-        f.write("Pearson Correlation between Price & Average Review Length: " + str(pearson_value))
 
     return pearson_value
 
@@ -130,21 +118,41 @@ def tfidf_review_text(df):
     with Timer("Convert TF-IDF sparseVector to (word:value dict)"):
         my_udf_func = udf(lambda vector: sparse2dict(vector, idx2word), types.StringType())
         df = df.select("reviewText", my_udf_func("tfidf").alias("tfidf_final"))
-
-    show_df(df, 10)
     return df
+
+def export_pearson_results(pearson_value):
+    with Timer("Exporting Pearson results to HDFS"):
+        with open("results_pearson.txt", "w") as f:
+            f.write("Pearson Correlation between Price & Average Review Length: " + str(pearson_value))
+    return
+
+def export_tfidf_results(df):
+    with Timer("Exporting tfidf results to HDFS"):
+        df.write.format('csv').option('header',True).mode('overwrite').option('sep','|').save('tfidf_result/')
+    return
 
 if __name__ == "__main__":
     
     with Timer("Spark script"):
-        spark = SparkSession.builder.master("local[*]").getOrCreate()
         print("Running spark_app.py")
-
+        # Production
+        spark = SparkSession.builder.master("local[*]").config("spark.mongodb.input.uri", "mongodb://100.26.139.227/meta.newmetadata").config("spark.mongodb.output.uri", "mongodb://100.26.139.227/meta.newmetadata").getOrCreate()
         df_reviews = load_data("./output/mysql_reviews_data.csv")
-        df_meta = load_data("./output/mongo_data.json")
-        
-        df_reviews.show(5)
-        df_meta.show(5)
+        df_meta = spark.read.format("mongo").load()
 
+        # Local
+        # spark = SparkSession.builder.master("local[*]").getOrCreate()
+        # df_reviews = load_data("./output/mysql_reviews_data.csv")
+        # df_meta = load_data("./output/mongo_data.json")
+        
         pearson_value = pearson_price_vs_review_length(df_meta, df_reviews)
         df_tfidf = tfidf_review_text(df_reviews)
+
+        # Present results
+        print(f"Correlation value:{pearson_value}\n")
+
+        show_df(df_tfidf,10)
+        df_tfidf.show()
+
+        export_pearson_results(pearson_value)
+        export_tfidf_results(df_tfidf)
