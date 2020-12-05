@@ -2,8 +2,10 @@ from flask import Flask
 from flask_restful import Api
 from db import db
 from books.resource import Review, ReviewList
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 db.init_app(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:password@localhost/50043_db'
