@@ -92,8 +92,14 @@ Users are able to:
 	- Search using Author
 	- Search using Title
     - Done using regex to search for the exact string
+    
+#### 3. Dynamic Search with search Autocomplete:
+![img](./readme_images/dynamic_search.jpeg)
+- Search:
+	- Search both using Author and Title
+    - Done by searching a MongoDB Text index
 
-#### 3. Add a book:
+#### 4. Add a book:
 ![img](./readme_images/addbook.jpeg)
 - Add Book:
 	- Asin
@@ -102,7 +108,7 @@ Users are able to:
 	- Categories
 	- Description
 
-#### 4. Add a review:
+#### 5. Add a review:
 ![img](./readme_images/addreview.jpeg)
 -	Add Review
 	- Asin
