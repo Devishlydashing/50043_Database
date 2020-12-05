@@ -95,9 +95,10 @@ Users are able to:
     
 #### 3. Dynamic Search with search Autocomplete:
 ![img](./readme_images/dynamic_search.jpeg)
+
 - Search:
 	- Search both using Author and Title
-    - Done by searching a MongoDB Text index
+    - Done by creating and searching a MongoDB Text index which is much faster than regex
 
 #### 4. Add a book:
 ![img](./readme_images/addbook.jpeg)
