@@ -133,7 +133,7 @@ def delete_record():
         return {'message': 'Book does not exist so cannot delete metadata', 'data': {}}, 404
 
 #make searchbar dynamic
-@app.route('/dynamicSearch',method=["GET"])
+@app.route('/dynamicSearch',methods=["GET"])
 def dynamic_search():
     db = client['meta']
     collection= db['newmetadata']
