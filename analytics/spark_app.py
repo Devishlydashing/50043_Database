@@ -132,12 +132,21 @@ def export_tfidf_results(df):
     return
 
 if __name__ == "__main__":
-    
+
+    with Timer("Retrieve IP address from ip.txt file sent from master ec2"):
+        # with open('./terraform-group08/ip.txt', 'r') as f: ips = f.readlines()
+        with open('/home/ip.txt', 'r') as f: 
+            mongo_ip = f.readlines()
+            mongo_ip = mongo_ip[2].split("=")[1].rstrip('\r\n')
+            mongo_ip = mongo_ip.strip()
+
+
     with Timer("Spark script"):
         print("Running spark_app.py")
         # Production
-        spark = SparkSession.builder.master("local[*]").config("spark.mongodb.input.uri", "mongodb://100.26.139.227/meta.newmetadata").config("spark.mongodb.output.uri", "mongodb://100.26.139.227/meta.newmetadata").getOrCreate()
-        df_reviews = load_data("./output/mysql_reviews_data.csv")
+        mongo_db_address = "mongodb://{}/meta.newmetadata".format(mongo_ip)
+        spark = SparkSession.builder.master("local[*]").config("spark.mongodb.input.uri", mongo_db_address).config("spark.mongodb.output.uri", mongo_db_address).getOrCreate()
+        df_reviews = load_data("./output/reviews.csv")
         df_meta = spark.read.format("mongo").load()
 
         # Local
