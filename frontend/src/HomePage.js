@@ -56,11 +56,20 @@ class HomePage extends React.Component{
         <div class="ui grid" style={{ marginTop: '2em' }}>
           {this.renderBooks()}
         </div>
+        <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        >
         <Pagination
               onPageChange={this.handlePaginationChange}
               activePage={activePage}
               totalPages={100}
-        />      
+              
+        /> 
+        </div>     
       </Container>  
       {/* <Mygrid /> */}
    </div>
@@ -70,3 +79,4 @@ class HomePage extends React.Component{
 }
 
 export default HomePage;
+
