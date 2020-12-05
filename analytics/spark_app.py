@@ -103,6 +103,8 @@ def tfidf_review_text(df):
         pipeline = ml.Pipeline(stages=[tokenizer, cv, idf])
         model = pipeline.fit(df)
         df = model.transform(df)
+        df.unpersist()
+        # df.cache()
 
     stages = model.stages
     # print(f"stages: {stages}")
@@ -110,50 +112,49 @@ def tfidf_review_text(df):
     vectorizers = [s for s in stages if isinstance(s, CountVectorizerModel)]
     vocab = [v.vocabulary for v in vectorizers]
     vocab = vocab[0]
-    # print(vocab[-1])
     # print(f"Length of Vocab: {len(vocab[0])}")
 
     idx2word = {idx: word for idx, word in enumerate(vocab)}
 
     with Timer("Convert TF-IDF sparseVector to (word:value dict)"):
         my_udf_func = udf(lambda vector: sparse2dict(vector, idx2word), types.StringType())
-        df = df.select("reviewText", my_udf_func("tfidf").alias("tfidf_final"))
+        df = df.select("reviewText", my_udf_func("tfidf").alias("tfidf"))
     return df
 
 def export_pearson_results(pearson_value):
     with Timer("Exporting Pearson results to HDFS"):
-        with open("results_pearson.txt", "w") as f:
+        with open("pearson_results.txt", "w") as f:
             f.write("Pearson Correlation between Price & Average Review Length: " + str(pearson_value))
     return
 
 def export_tfidf_results(df):
     with Timer("Exporting tfidf results to HDFS"):
-        df.write.format('csv').option('header',True).mode('overwrite').option('sep','|').save('tfidf_result/')
+        df.write.format('csv').option('header',True).mode('overwrite').option('sep','|').save('output/')
     return
 
 if __name__ == "__main__":
 
-    with Timer("Retrieve IP address from ip.txt file sent from master ec2"):
-        # with open('./terraform-group08/ip.txt', 'r') as f: ips = f.readlines()
-        with open('/home/ip.txt', 'r') as f: 
-            mongo_ip = f.readlines()
-            mongo_ip = mongo_ip[2].split("=")[1].rstrip('\r\n')
-            mongo_ip = mongo_ip.strip()
-
-
     with Timer("Spark script"):
         print("Running spark_app.py")
+        
         # Production
+        with Timer("Retrieve IP address from ip.txt file sent from master ec2"):
+            with open('/home/ip.txt', 'r') as f: 
+                mongo_ip = f.readlines()
+                mongo_ip = mongo_ip[2].split("=")[1].rstrip('\r\n')
+                mongo_ip = mongo_ip.strip()
+
         mongo_db_address = "mongodb://{}/meta.newmetadata".format(mongo_ip)
         spark = SparkSession.builder.master("local[*]").config("spark.mongodb.input.uri", mongo_db_address).config("spark.mongodb.output.uri", mongo_db_address).getOrCreate()
-        df_reviews = load_data("./output/reviews.csv")
+        df_reviews = load_data("reviews.csv")
         df_meta = spark.read.format("mongo").load()
 
-        # Local
+        # Local =====
         # spark = SparkSession.builder.master("local[*]").getOrCreate()
-        # df_reviews = load_data("./output/mysql_reviews_data.csv")
-        # df_meta = load_data("./output/mongo_data.json")
-        
+        # df_reviews = load_data("./data/reviews.csv")
+        # df_meta = load_data("./data/mongo_data.json")
+        # ======
+
         pearson_value = pearson_price_vs_review_length(df_meta, df_reviews)
         df_tfidf = tfidf_review_text(df_reviews)
 
