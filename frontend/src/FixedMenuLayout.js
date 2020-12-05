@@ -11,8 +11,6 @@ import axios from 'axios';
 import _ from "lodash";
 import BookView from './component/BookView';
 
-const { MONGO_IP } = process.env;
-
 class FixedMenuLayout extends React.Component {
    options = [
     { key: 'author', text: 'author', value: 'author' },
@@ -31,7 +29,7 @@ class FixedMenuLayout extends React.Component {
     // setuserSearch(e.target.value);
     this.setState({userSearch:e.target.value});
     // place dynamic search here!
-    axios.get('http://'+ { MONGO_IP }+'/dynamicSearch?author='+this.state.userSearch)
+    axios.get('http://'+ process.env.REACT_APP_MONGO_IP+'/dynamicSearch?author='+this.state.userSearch)
     .then(res => {
       this.setState({books:res.data});
       console.log(this.state.books);

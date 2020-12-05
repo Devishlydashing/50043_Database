@@ -3,8 +3,6 @@ import { Button, Container, Form ,Rating} from 'semantic-ui-react';
 import FixedMenuLayout from "./FixedMenuLayout";
 import axios from 'axios';
 
-const { MYSQL_IP } = process.env;
-
 const AddReview = () => {
     const [asin, setAsin] = useState('');
     const [reviewerID, setReviewerid] = useState('');
@@ -48,7 +46,7 @@ const AddReview = () => {
         .map(key => `${key}=${params[key]}`)
         .join('&');
         console.log(data)
-        const submitURL = `http://`+{ MYSQL_IP }+`/review/?${data}`
+        const submitURL = `http://`+process.env.REACT_APP_MYSQL_IP+`/review/?${data}`
         axios.post(submitURL,data)
         .then(res => {
             console.log(res);
