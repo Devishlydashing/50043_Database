@@ -132,5 +132,20 @@ def delete_record():
         add_log(request.method, request.url, {"book does not exist so not deleted": asin1}, response_code, collection1)
         return {'message': 'Book does not exist so cannot delete metadata', 'data': {}}, 404
 
+#make searchbar dynamic
+@app.route('/dynamicSearch',methods=["GET"])
+def dynamic_search():
+    db = client['meta']
+    collection= db['newmetadata']
+    search_query = request.args.get('author')
+    res = collection.find({"$text": {"$search": search_query}})
+    if res != None:
+            response_code=201
+            return dumps(res)
+    else:
+        return {'message': 'Book does not exists!', 'data': {}}, 404
+
+
+
 if __name__ == "__main__":
     app.run()
