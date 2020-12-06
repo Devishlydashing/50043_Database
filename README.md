@@ -57,7 +57,7 @@ POST | "{mongo_flask_ip}/bookPost" | Add a new book
 GET  | "{mongo_flask_ip}/bookSearch" | Searching for a book based on title / author / category
 DELETE  | "{mongo_flask_ip}/metadelete" | Delete a book
 
-### For more information on API methods, look under [Appendix](#Appendix).
+### For more information on API methods, look under [API Documentation](#API-Documentation).
 
 <br/><br/>
 
@@ -92,8 +92,15 @@ Users are able to:
 	- Search using Author
 	- Search using Title
     - Done using regex to search for the exact string
+    
+#### 3. Dynamic Search with search Autocomplete:
+![img](./readme_images/dynamic_search.jpeg)
 
-#### 3. Add a book:
+- Search:
+	- Search both using Author and Title
+    - Done by creating and searching a MongoDB Text index which is much faster than regex
+
+#### 4. Add a book:
 ![img](./readme_images/addbook.jpeg)
 - Add Book:
 	- Asin
@@ -102,7 +109,7 @@ Users are able to:
 	- Categories
 	- Description
 
-#### 4. Add a review:
+#### 5. Add a review:
 ![img](./readme_images/addreview.jpeg)
 -	Add Review
 	- Asin
@@ -233,7 +240,7 @@ vocab = vocab[0]
 idx2word = {idx: word for idx, word in enumerate(vocab)}
 
 my_udf_func = udf(lambda vector: sparse2dict(vector, idx2word), types.StringType())
-df = df.select("reviewText", my_udf_func("tfidf").alias("tfidf_final"))
+df = df.select("reviewText", my_udf_func("tfidf").alias("tfidf"))
 return df
 ```
 After running the analytics scripts detailed in the next section, the results can be found in hdfs under the /results/ directory.
@@ -289,7 +296,7 @@ only showing top 20 rows
 
 
 
-## API Documentation
+## API-Documentation
 
 #### **Get A Review**
 
