@@ -240,7 +240,7 @@ vocab = vocab[0]
 idx2word = {idx: word for idx, word in enumerate(vocab)}
 
 my_udf_func = udf(lambda vector: sparse2dict(vector, idx2word), types.StringType())
-df = df.select("reviewText", my_udf_func("tfidf").alias("tfidf_final"))
+df = df.select("reviewText", my_udf_func("tfidf").alias("tfidf"))
 return df
 ```
 After running the analytics scripts detailed in the next section, the results can be found in hdfs under the /results/ directory.
