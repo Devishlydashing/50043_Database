@@ -122,7 +122,7 @@ Users are able to:
 	- Time
 	- Summary
 	
-#### 6. Show all reviews:
+#### 6. Show all reviews of a book:
 ![img](./readme_images/bookreview.jpeg)
 
 ## Analytics Tasks
