@@ -7,9 +7,11 @@ import {
   Icon
 } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
+import { ReactDOM,render} from "react-dom";
 import axios from 'axios';
 import _ from "lodash";
 import BookView from './component/BookView';
+import ResultPage from './ResultPage';
 
 class FixedMenuLayout extends React.Component {
    options = [
@@ -29,7 +31,7 @@ class FixedMenuLayout extends React.Component {
     // setuserSearch(e.target.value);
     this.setState({userSearch:e.target.value});
     // place dynamic search here!
-    axios.get('http://'+ process.env.REACT_APP_MONGO_IP+'/dynamicSearch?author='+this.state.userSearch)
+    axios.get('http://'+ process.env.REACT_APP_MONGO_IP+'/bookSearch?author='+this.state.userSearch)
     .then(res => {
       this.setState({books:res.data});
       console.log(this.state.books);
@@ -48,13 +50,26 @@ class FixedMenuLayout extends React.Component {
   }
   
    handleSubmit = e => {
-    console.log("Submit search")
-    console.log(this.state)
-    this.props.history.push({
-      pathname: '/result',
-      state: this.state
-    });
-    e.preventDefault();
+     if(this.props.onSearchSubmit) {
+      console.log(this.state.userSearch,this.state.userOption);
+      this.props.onSearchSubmit(this.state.userSearch,this.state.userOption);
+      return;
+     }
+     console.log('global search');
+     if(!this.props.onSearchSubmit) {
+      console.log("Submit search");
+      if(this.props.history.location.pathname=='/result'){
+        console.log("inside result");
+      }
+      else{
+      this.props.history.push({
+        pathname: '/result',
+        state: this.state
+      });
+      }
+      e.preventDefault();
+     }
+   
   }
   renderBooks() {
     return (
