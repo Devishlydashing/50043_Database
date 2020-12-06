@@ -13,28 +13,52 @@ As part of our 50.043 Database project, we created a web application for Kindle 
 ## Directory Structure:
 
 ```
+```
 .
 ├── Automation
-│   ├── config.py              # Sets access_key, secret_access_key, session_token and region
-│   ├── ec2_create.py          # Creates EC2 instances
-│   ├── start.sh               # Bash script to start up EC2 instances
-│   ├── teardown.py            # Tears down EC2 instances
+│   ├── config.py                 # Sets access_key, secret_access_key, session_token and region
+│   ├── ec2_create.py             # Creates EC2 instances
+│   ├── start.sh                  # Bash script to start up EC2 instances
+│   ├── teardown.py               # Tears down EC2 instances
 ├── analytics
-│   ├── spark_app.py           # TFIDF and Pearson Correlation functions
+│   ├── spark_app.py              # TFIDF and Pearson Correlation functions
 ├── books
-│   ├── model.py               # Creates MySQL database model
-│   ├── resource.py            # Creates MySQL endpoints
+│   ├── model.py                  # Creates MySQL database model
+│   ├── resource.py               # Creates MySQL endpoints
+├── frontend
+│   ├── public                    # default folder
+│   ├── src                       # folder containing web pages for frontend
+│   ├── .gitignore
+│   ├── README.md
+│   ├── package.json
+│   ├── yarn.lock
+├── readme_images
+│   ├── Systems_architecture.png  # Image for System architecture
+│   ├── addbook.jpeg              # Image for page where users can add a book
+│   ├── addreview.jpeg            # Image for page where users can add a book review
+│   ├── bookreview.jpeg           # Image for page where users can view a book review
+│   ├── dynamic_search.jpeg       # Image for page where users search for a book
+│   ├── homepage.jpeg             # Image for home page
+│   ├── search_author.jpeg        # Image for page where users can search by author
+│   ├── search_title.jpeg         # Image for page where users can search by title
 ├── scripts
 │   ├── load_reviews_ec2.sql   # Loads kindle_reviews into EC2
 │   ├── load_reviews_local.sql # Loads kindle_reviews into localhost
+├── .DS_Store
 ├── .gitignore                 # To ignore pycache & ds_store in all folders
-├── README.md                  
-├── flaskapp.py                # instantiate Flask for MySQL
+├── .000-default.conf          # Configuration file
+├── README.md                  # READme documentation
 ├── author.py                  # Web scraping to update author and title values in mongoDB
 ├── db.py                      # instantiate SQLAlchemy
+├── flaskapp.py                # instantiate Flask for MySQL
+├── flaskapp.wsgi              # WSGI for Flask
+├── httpd.conf                 # main Apache HTTP server configuration file
+├── middleware-mongo.wsgi      # WSGI for middleware-mongo.py
 ├── middleware_mongo.py        # Creates MongoDB endpoints
+├── mongoindex.py              # Creates MongoDB indexing
 └── utils.py                   # Function for adding logs into mongoDB
 
+```
 ```
 
 
