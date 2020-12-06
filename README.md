@@ -19,20 +19,26 @@ As part of our 50.043 Database project, we created a web application for Kindle 
 │   ├── ec2_create.py             # Creates EC2 instances
 │   ├── start.sh                  # Bash script to start up EC2 instances
 │   ├── teardown.py               # Tears down EC2 instances
+│   ├── generate_scripts.py       # Generates relevant scripts for set up of various servers
+│   ├── sql_setup.py              # Sets up MySQL EC2 instance
+│   ├── mongo_setup.py            # Sets up flask-mongo server
+│   ├── react_setup.py            # Sets up react front-end
+│   ├── analytics_setup.py        # Sets up Hadoop cluster, Sqoop and Spark
+│   ├── analytics_start.py        # Spark analytics task
 ├── analytics
 │   ├── spark_app.py              # TFIDF and Pearson Correlation functions
 ├── books
 │   ├── model.py                  # Creates MySQL database model
 │   ├── resource.py               # Creates MySQL endpoints
 ├── frontend
-│   ├── public                    # default folder
-│   ├── src                       # folder containing web pages for frontend
+│   ├── public                    # Default react folder
+│   ├── src                       # Folder containing web pages for frontend
 │   ├── .gitignore
 │   ├── README.md
 │   ├── package.json
 │   ├── yarn.lock
 ├── readme_images
-│   ├── Systems_architecture.png  # Image for System architecture
+│   ├── Software_architecture.png # Image for software architecture
 │   ├── addbook.jpeg              # Image for page where users can add a book
 │   ├── addreview.jpeg            # Image for page where users can add a book review
 │   ├── bookreview.jpeg           # Image for page where users can view a book review
@@ -41,20 +47,20 @@ As part of our 50.043 Database project, we created a web application for Kindle 
 │   ├── search_author.jpeg        # Image for page where users can search by author
 │   ├── search_title.jpeg         # Image for page where users can search by title
 ├── scripts
-│   ├── load_reviews_ec2.sql   # Loads kindle_reviews into EC2
-│   ├── load_reviews_local.sql # Loads kindle_reviews into localhost
-├── .gitignore                 # To ignore pycache & ds_store in all folders
-├── .000-default.conf          # Configuration file
-├── README.md                  # ReadMe documentation
-├── author.py                  # Web scraping to update author and title values in mongoDB
-├── db.py                      # instantiate SQLAlchemy
-├── flaskapp.py                # instantiate Flask for MySQL
-├── flaskapp.wsgi              # WSGI for Flask
-├── httpd.conf                 # main Apache HTTP server configuration file
-├── middleware-mongo.wsgi      # WSGI for middleware-mongo.py
-├── middleware_mongo.py        # Creates MongoDB endpoints
-├── mongoindex.py              # Creates MongoDB indexing
-└── utils.py                   # Function for adding logs into mongoDB
+│   ├── load_reviews_ec2.sql      # Loads kindle_reviews into EC2
+│   ├── load_reviews_local.sql    # Loads kindle_reviews into localhost
+├── .gitignore                    # To ignore pycache & ds_store in all folders
+├── .000-default.conf             # Configuration file
+├── README.md                     # README documentation
+├── author.py                     # Web scraping to update author and title values in mongoDB
+├── db.py                         # Instantiate SQLAlchemy
+├── flaskapp.py                   # Instantiate Flask for MySQL
+├── flaskapp.wsgi                 # WSGI for Flask
+├── httpd.conf                    # Main Apache HTTP server configuration file
+├── middleware-mongo.wsgi         # WSGI for middleware-mongo.py
+├── middleware_mongo.py           # Creates MongoDB endpoints
+├── mongoindex.py                 # Creates MongoDB indexing
+└── utils.py                      # Function for adding logs into mongoDB
 
 ```
 
@@ -207,8 +213,6 @@ def map_reduce_pearson(rdd):
   <img src= "https://latex.codecogs.com/svg.latex?\small&space;r&space;=&space;\frac{n&space;\sum&space;xy&space;-&space;\sum&space;x&space;\sum&space;y}{\sqrt&space;{(n&space;\sum&space;x^{2}&space;-&space;(\sum&space;x)^{2})&space;(n&space;\sum&space;y^{2}&space;-&space;(\sum&space;y)^{2})}}"/>
 </p>
 
-After running the analytics script, we can find the results in the same directory as the spark_app.py file. We can find it by running this command: <br>
-``` hdfs -l pearson_results.txt```
 
 #### 2. TF-IDF
 
