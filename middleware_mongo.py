@@ -5,9 +5,10 @@ import json
 import time
 from flask import Flask, session, request, jsonify, g
 from utils import add_log # import adding logs function from utils.py
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 mongo_uri = "mongodb://localhost:27017/"
 client = pymongo.MongoClient(mongo_uri)
 
