@@ -29,7 +29,7 @@ As part of our 50.043 Database project, we created a web application for Kindle 
 │   ├── load_reviews_local.sql # Loads kindle_reviews into localhost
 ├── .gitignore                 # To ignore pycache & ds_store in all folders
 ├── README.md                  
-├── app.py                     # instantiate Flask for MySQL
+├── flaskapp.py                # instantiate Flask for MySQL
 ├── author.py                  # Web scraping to update author and title values in mongoDB
 ├── db.py                      # instantiate SQLAlchemy
 ├── middleware_mongo.py        # Creates MongoDB endpoints
