@@ -11,8 +11,8 @@ app = Flask(__name__)
 CORS(app)
 mongo_uri = "mongodb://localhost:27017/"
 client = pymongo.MongoClient(mongo_uri)
-db = client['meta']
-db.newmetadata.create_index([('author','text')])
+
+
 
 # Get all books
 @app.route('/allbooks',methods=["GET"])
