@@ -4,7 +4,7 @@ As part of our 50.043 Database project, we created a web application for Kindle 
 
 ## Table Of Contents:
 - [Directory Structure](#Directory-Structure)
-- [Systems Architecture](#Systems-Architecture)
+- [Software Architecture](#Software-Architecture)
 - [Front-end Features](#Front-end-Features)
 - [Analytics Tasks](#Analytics-Tasks)
 - [Automation](#Automation)
@@ -46,7 +46,7 @@ As part of our 50.043 Database project, we created a web application for Kindle 
 ├── .DS_Store
 ├── .gitignore                 # To ignore pycache & ds_store in all folders
 ├── .000-default.conf          # Configuration file
-├── README.md                  # READme documentation
+├── README.md                  # ReadMe documentation
 ├── author.py                  # Web scraping to update author and title values in mongoDB
 ├── db.py                      # instantiate SQLAlchemy
 ├── flaskapp.py                # instantiate Flask for MySQL
@@ -60,10 +60,10 @@ As part of our 50.043 Database project, we created a web application for Kindle 
 ```
 
 
-## Systems Architecture
+## Software Architecture
 
 
-![img](./readme_images/Systems_architecture.png)
+![img](./readme_images/Software_architecture.png)
 
 ### API Methods
 API Method | Route | Output
@@ -85,56 +85,22 @@ GET  | "{mongo_flask_ip}/dynamicSearch" | Dynamic search to Autocomplete user se
 <br/><br/>
 
 ## Front-end Features
-
-1. Search for an existing book by title
-2. Search for an existing book by author
-3. Dynamic search Autocomplete
-4. Adds a new book
-5. Add a new review
-6. View a book review
-
-### Screenshot of our Home/Explore Page:
+### Our Home/Explore Page:
 ![img](./readme_images/homepage.jpeg)
-
 
 Users are able to:
 - View Book Covers
 - View Book Title
-- View Book Author
-	- Done via web scraping script
-	- Uses BeautifulSoup
+- View Book Author (Webscraping using BeautifulSoup)
 - When a user clicks on a particular book, they are able to view the book reviews
 
-### Actions:
+### Main Features:
+- Add a new book
+- Search For An Existing Book By Author
+- Search For An Existing Book By Title
+- Add a new review
 
-#### 1. Search for an existing book by title:
-![img](./readme_images/search_title.jpeg)
-
-#### 2. Search for an existing book by author:
-![img](./readme_images/search_author.jpeg)
-
-- Search:
-	- Search using Author
-	- Search using Title
-    - Done using regex to search for the exact string
-    
-#### 3. Dynamic Search with search Autocomplete:
-![img](./readme_images/dynamic_search.jpeg)
-
-- Search:
-	- Search both using Author and Title
-    - Done by creating and searching a MongoDB Text index which is much faster than regex
-
-#### 4. Add a book:
-![img](./readme_images/addbook.jpeg)
-- Add Book:
-	- Asin
-	- Price
-	- Image URL
-	- Categories
-	- Description
-
-#### 5. Add a review:
+#### 1. Add A Review:
 ![img](./readme_images/addreview.jpeg)
 -	Add Review
 	- Asin
@@ -143,9 +109,44 @@ Users are able to:
 	- Rating
 	- Time
 	- Summary
-	
-#### 6. Show all reviews of a book:
+
+#### 2. Add a book:
+![img](./readme_images/addbook.jpeg)
+- Add Book:
+	- Asin
+	- Price
+	- Image URL
+	- Categories
+	- Description
+
+#### 3. Search For An Existing Book By Author:
+![img](./readme_images/search_author.jpeg)
+
+- Search By Author
+  - Done using regex to search for the exact string
+
+#### 4. Search For An Existing Book By Title:
+![img](./readme_images/search_title.jpeg)
+
+- Search By Title
+  - Done using regex to search for the exact string
+
+
+### Additional Features
+
+#### 1. Dynamic Search With Autocomplete:
+![img](./readme_images/dynamic_search.jpeg)
+
+- This is achieved by creating and searching a MongoDB Text index which is much faster than regex
+- This is crucial in providing a seemless user experience on our webpage
+
+
+#### 2. View All Reviews of A Book:
 ![img](./readme_images/bookreview.jpeg)
+
+#### 3. Webscraping of Book Author & Title
+- To populate book author and title
+- Done with BeautifulSoup
 
 ## Analytics Tasks
 
@@ -156,9 +157,9 @@ Build an analytics system that performs the following :
 - Correlation: Compute the Pearson correlation between price and average review length.
 - TF-IDF: Compute the term frequency inverse document frequency metric on the review text. Treat one review as a document.
 
-#### Approach
+### Approach
 
-##### 1. Pearson Cofficient
+#### 1. Pearson Cofficient
 
 **Pre-processing**
 
@@ -210,7 +211,7 @@ def map_reduce_pearson(rdd):
 After running the analytics script, we can find the results in the same directory as the spark_app.py file. We can find it by running this command: <br>
 ``` hdfs -l pearson_results.txt```
 
-##### 2. TF-IDF
+#### 2. TF-IDF
 
 **a. Create Tokenizer: To convert each review into an array of words**
 
