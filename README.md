@@ -316,6 +316,74 @@ only showing top 20 rows
 ## Automation
 
 
+### Scripts:
+- **start.sh**
+  - The starting code to run for automation process to begin.
+  - Takes in user configs (AWS keys, region, github user, github pass).
+  - Configures AWS Configure.
+  - Produces 'config.py' to store user input at start of script.
+  - Calls other set up python scripts respectively and coordinates setup of servers.
+
+- **ec2_create.py**
+  - Creates 'ec2-group08-keypair.pem' keypair for aws.
+  - Creates 'security_group08' security group.
+  - Creates respective AWS instances using Terraform.
+    - 2 ubuntu 18.04 instances (MySQL & React Front-End)
+    - 1 redhat 7.2 instance (Mongodb)
+    - 1 + n ubuntu 18.04 instances (Hadoop cluster; n = number of worker nodes input by user)
+    - Saves IP addresses of all created instances in ./terraform-group08/ip.txt
+  
+- **generate_scripts.py**
+  - Generates relevant scripts for set up of various servers
+    - scripts that require:
+      - Changing IP fields
+      - Github user & Pass
+      - Number of nodes (chosen by user)
+
+- **sql_setup.py**
+  - Sends over sql_setup.sh script over to ec2 instance.
+  - Runs setup script on ec2 instance, to set up flask-sql server.
+
+- **mongo_setup.py**
+  - Sends over mongo_setup.sh script over to ec2 instance.
+  - Runs setup script on ec2 instance, to set up flask-mongo server.
+
+- **react_setup.py**
+  - Sends over react_setup.sh script over to ec2 instance.
+  - Runs setup script on ec2 instance, to set up react front-end.
+
+- **analytics_setup.py**
+  - Sends over multiple set-up scripts to respective Master and Worker nodes, so that specific parts of the set up will be run sequentially.
+  - Sets up Hadoop cluster, Sqoop and Spark.
+
+- **analytics_start.py**
+  - Starts Spark analytics tasks on Master node.
+
+- **teardown.py**
+  - Destroys all ec2 instances.
+  - Destroys created 'security_group08' security group.
+  - Destroys created 'ec2-group08-keypair.pem' key.
+  - Deletes downloaded files and folders like aws-cli folder.
+
+
+## Usage
+
+1. on fresh ec2-instance, git clone group repository.
+2. Navigate to ~/50.043---Database/Automation/
+3. Run start.sh as NON-ROOT
+  > ./start.sh
+4. Input credentials as prompted (**AWS EDUCATE NOT ALLOWED**):
+
+![img](./readme_images/start_input.png)<br><br>
+5. The script will take approximately 30 minutes to run. Sit back and relax!\
+6. Once ec2 instances are created, the following output will be shown. You can also check the instances and their details in your AWS console.<br><br>
+![img](./readme_images/ec2_create.png) <br><br>
+7. Once the production servers are up and running, and our book website is available for viewing, an IP address will be returned, which can be accessed through any web browser.<br><br>
+![img](./readme_images/production_done.png) <br><br>
+8. While users are viewing the website, the script will be paused, awaiting for an input to run the analytic tasks. Enter 'Y' to proceed. <br><br>
+![img](./readme_images/yes_to_continue.png) <br><br>
+9. Once done, users can run teardown.py to destroy all ec2 instances, security groups, generated keys, as well as other files.
+
 
 
 
