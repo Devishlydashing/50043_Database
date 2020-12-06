@@ -43,7 +43,6 @@ As part of our 50.043 Database project, we created a web application for Kindle 
 ├── scripts
 │   ├── load_reviews_ec2.sql   # Loads kindle_reviews into EC2
 │   ├── load_reviews_local.sql # Loads kindle_reviews into localhost
-├── .DS_Store
 ├── .gitignore                 # To ignore pycache & ds_store in all folders
 ├── .000-default.conf          # Configuration file
 ├── README.md                  # ReadMe documentation
