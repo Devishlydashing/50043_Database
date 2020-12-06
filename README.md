@@ -57,7 +57,7 @@ POST | "{mongo_flask_ip}/bookPost" | Add a new book
 GET  | "{mongo_flask_ip}/bookSearch" | Searching for a book based on title / author / category
 DELETE  | "{mongo_flask_ip}/metadelete" | Delete a book
 
-### For more information on API methods, look under [Appendix](#Appendix).
+### For more information on API methods, look under [API Documentation](#API-Documentation).
 
 <br/><br/>
 
@@ -296,7 +296,7 @@ only showing top 20 rows
 
 
 
-## API Documentation
+## API-Documentation
 
 #### **Get A Review**
 
