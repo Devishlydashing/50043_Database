@@ -56,6 +56,7 @@ GET  | "{mongo_flask_ip}/metadata/<asin>" | Get a book
 POST | "{mongo_flask_ip}/bookPost" | Add a new book
 GET  | "{mongo_flask_ip}/bookSearch" | Searching for a book based on title / author / category
 DELETE  | "{mongo_flask_ip}/metadelete" | Delete a book
+GET  | "{mongo_flask_ip}/dynamicSearch" | Dynamic search to Autocomplete user search queries
 
 ### For more information on API methods, look under [API Documentation](#API-Documentation).
 
@@ -65,6 +66,7 @@ DELETE  | "{mongo_flask_ip}/metadelete" | Delete a book
 
 1. Search for an existing book by title
 2. Search for an existing book by author
+3. Dynamic search Autocomplete
 3. Adds a new book
 4. Add a new review
 
