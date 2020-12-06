@@ -18,7 +18,7 @@ def get_author(query_string):
     soup = BeautifulSoup(page.content, 'html.parser')
     spans = soup.find_all("span", itemprop="name")
     if spans == []:
-        return "na", "na"
+        return "  ", "  "
     # imageURL = soup.find_all(class_="bookCover",itemprop="image")
     title = spans[0].text
     author = spans[1].text
