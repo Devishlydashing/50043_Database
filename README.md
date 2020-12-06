@@ -372,7 +372,7 @@ only showing top 20 rows
 
 ## Usage
 
-1. on fresh ec2-instance, git clone group repository.
+1. On fresh ec2-instance (us-east-1), git clone group repository.
 2. Navigate to ~/50.043---Database/Automation/
 3. Run start.sh as NON-ROOT
   > ./start.sh
