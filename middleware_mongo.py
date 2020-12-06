@@ -138,8 +138,8 @@ def delete_record():
 #make searchbar dynamic
 @app.route('/dynamicSearch',methods=["GET"])
 def dynamic_search():
-    #db = client['meta']
-    #collection= db['newmetadata']
+    db = client['meta']
+    collection= db['newmetadata']
     search_query = request.args.get('author')
     res = collection.find({"$text": {"$search": search_query}})
     if res != None:
