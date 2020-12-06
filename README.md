@@ -67,8 +67,9 @@ GET  | "{mongo_flask_ip}/dynamicSearch" | Dynamic search to Autocomplete user se
 1. Search for an existing book by title
 2. Search for an existing book by author
 3. Dynamic search Autocomplete
-3. Adds a new book
-4. Add a new review
+4. Adds a new book
+5. Add a new review
+6. View a book review
 
 ### Screenshot of our Home/Explore Page:
 ![img](./readme_images/homepage.jpeg)
@@ -120,7 +121,9 @@ Users are able to:
 	- Rating
 	- Time
 	- Summary
-
+	
+#### 6. Show all reviews:
+![img](./readme_images/search_title.jpeg)
 
 ## Analytics Tasks
 
