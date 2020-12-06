@@ -123,7 +123,7 @@ Users are able to:
 	- Summary
 	
 #### 6. Show all reviews:
-![img](./readme_images/search_title.jpeg)
+![img](./readme_images/bookreview.jpeg)
 
 ## Analytics Tasks
 
