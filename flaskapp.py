@@ -6,7 +6,7 @@ from flask_cors import CORS
 import pymysql
 
 app = Flask(__name__)
-
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/50043_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # This turns off FlaskSQLAlchemy modification tracker but not SQLAlchemy modification tracker
 db.init_app(app)
