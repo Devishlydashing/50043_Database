@@ -1,6 +1,6 @@
 # 50.043 Database Project
 
-As part of our 50.043 Database project, we created a web application for Kindle book reviews. We deployed our application using Flask with a MySQL and MongoDB databases. The MySQL database stores book reviews while the MongoDB stores logs as well as the metadata of books. Our group members consists of Lee Min Han, Nicholas Lee, Pung Tuck Wei, Noorbakht Khan and Dev Bahl.
+As part of our 50.043 Database project, we created a web application for Kindle book reviews. We deployed our application using Flask with a MySQL and MongoDB databases. The MySQL database stores book reviews while the MongoDB stores logs as well as the metadata of books. Our group members consists of Lee Min Han (1003476), Nicholas Leu (1003338), Pung Tuck Wei (1003523), Noorbakht Khan (1003827) and Dev Bahl (1003375).
 
 ## Table Of Contents:
 - [Directory Structure](#Directory-Structure)
