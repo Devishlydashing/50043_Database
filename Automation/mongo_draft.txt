@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# update repositories
+sudo yum -y install git
+sudo yum -y install wget
+sudo yum -y install unzip
+sudo wget -c https://istd50043.s3-ap-southeast-1.amazonaws.com/meta_kindle_store.zip -O meta_kindle_store.zip
+sudo unzip meta_kindle_store.zip
+sudo yum -y install python-setuptools
+sudo easy_install pip
+sudo pip install flask pymongo bson
+sudo yum -y install httpd
+sudo yum -y install mod_wsgi
+sudo chkconfig --levels 235 httpd on
+sudo service httpd restart
+sudo /usr/sbin/setsebool -P httpd_can_network_connect 1
+
+echo -e "[mongodb-org-4.4]\nname=MongoDB Repository\nbaseurl=https://repo.mongodb.org/yum/redhat/7/mongodb-org/4.4/x86_64/\ngpgcheck=1\nenabled=1\ngpgkey=https://www.mongodb.org/static/pgp/server-4.4.asc" | sudo tee /etc/yum.repos.d/mongodb-org-4.4.repo
+sudo yum -y install mongodb-org
+sudo systemctl start mongod
+sudo mongoimport --db meta --collection newmetadata --file /home/ec2-user/meta_Kindle_Store.json --legacy
+
+cd /var/www/html
+sudo git clone --single-branch --branch fixautomation https://fatalfuric:Sholeiscool456@github.com/leeminhan/50.043---Database.git
+sudo mv 50.043---Database middleware_mongo
+cd middleware_mongo
+sudo mv middleware-mongo.py middleware_mongo.py
+sudo mv middleware-mongo.wsgi middleware_mongo.wsgi
+sudo cp httpd.conf /etc/httpd/conf/httpd.conf 
+sudo apachectl restart
+
+#sudo tail -30 /etc/httpd/logs/error_log
+
+
+
+
+
