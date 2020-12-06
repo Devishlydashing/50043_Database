@@ -13,7 +13,6 @@ As part of our 50.043 Database project, we created a web application for Kindle 
 ## Directory Structure:
 
 ```
-```
 .
 ├── Automation
 │   ├── config.py                 # Sets access_key, secret_access_key, session_token and region
@@ -58,7 +57,6 @@ As part of our 50.043 Database project, we created a web application for Kindle 
 ├── mongoindex.py              # Creates MongoDB indexing
 └── utils.py                   # Function for adding logs into mongoDB
 
-```
 ```
 
 
