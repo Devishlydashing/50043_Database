@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup
 
 mongo_uri = "mongodb://localhost:27017/"
 client = pymongo.MongoClient(mongo_uri)
-db = client['MetaData']
-collection = db['meta']
+db = client['meta']
+collection = db['newmetadata']
 
 
 def get_author(query_string):
