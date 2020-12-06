@@ -11,6 +11,8 @@ app = Flask(__name__)
 CORS(app)
 mongo_uri = "mongodb://localhost:27017/"
 client = pymongo.MongoClient(mongo_uri)
+db = client['meta']
+db.newmetadata.create_index([('author','text')])
 
 # Get all books
 @app.route('/allbooks',methods=["GET"])
@@ -136,8 +138,8 @@ def delete_record():
 #make searchbar dynamic
 @app.route('/dynamicSearch',methods=["GET"])
 def dynamic_search():
-    db = client['meta']
-    collection= db['newmetadata']
+    #db = client['meta']
+    #collection= db['newmetadata']
     search_query = request.args.get('author')
     res = collection.find({"$text": {"$search": search_query}})
     if res != None:
