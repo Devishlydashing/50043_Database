@@ -410,11 +410,11 @@ with open('run_analytics.sh','w') as f:
 cd /home/hadoop
 sudo git clone https://{}:{}@github.com/leeminhan/50.043---Database.git
 
-sudo mv /home/hadoop/50.043---Database/analytics/spark_app.py /user/hadoop/
+sudo mv /home/hadoop/50.043---Database/analytics/spark_app.py /home/hadoop/
 
 sudo -u hadoop /opt/hadoop-3.3.0/bin/hdfs dfs -mkdir /user/hadoop/output
 
-sudo -u hadoop /opt/spark-3.0.1-bin-hadoop3.2/bin/spark-submit --master yarn /user/hadoop/spark_app.py
+sudo -u hadoop /opt/spark-3.0.1-bin-hadoop3.2/bin/spark-submit --master yarn /home/hadoop/spark_app.py
 
 myFiles=$(/opt/hadoop-3.3.0/bin/hdfs dfs -find /user/hadoop/output/*.csv)
 
