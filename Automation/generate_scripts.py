@@ -408,6 +408,9 @@ with open('run_analytics.sh','w') as f:
 
 # get spark_app.py
 cd /home/hadoop
+
+sudo mv /home/ubuntu/ip.txt .
+
 sudo git clone https://{}:{}@github.com/leeminhan/50.043---Database.git
 
 sudo mv /home/hadoop/50.043---Database/analytics/spark_app.py /home/hadoop/
