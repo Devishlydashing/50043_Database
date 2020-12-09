@@ -370,6 +370,10 @@ with open('master_script_3.sh','w') as f:
 cd /home/hadoop
 
 sleep  10
+sudo -i -u hadoop sh -c '/opt/hadoop-3.3.0/sbin/stop-dfs.sh && /opt/hadoop-3.3.0/sbin/stop-yarn.sh'
+sleep 10
+sudo -i -u hadoop sh -c '/opt/hadoop-3.3.0/sbin/start-dfs.sh && /opt/hadoop-3.3.0/sbin/start-yarn.sh'
+sleep 10
 # run sqoop
 # DYNAMIC PUT MYSQL IP
 yes | sudo -u hadoop /opt/sqoop-1.4.7/bin/sqoop import --table reviews --username root --password password --as-parquetfile -m 1 --connect jdbc:mysql://{}:3306/50043_db?useSSL=false&allowPublicKeyRetrieval=true
