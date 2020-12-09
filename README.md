@@ -9,6 +9,7 @@ As part of our 50.043 Database project, we created a web application for Kindle 
 - [Analytics Tasks](#Analytics-Tasks)
 - [Automation](#Automation)
 - [API Documentation](#API-Documentation)
+- [Design Improvements] (#Design-Improvements)
 
 ## Directory Structure:
 
