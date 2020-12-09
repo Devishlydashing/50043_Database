@@ -62,7 +62,7 @@ os.system('scp -i {} -o StrictHostKeyChecking=no master_script_3.sh ubuntu@{}:/h
 os.system('ssh -i {} -o StrictHostKeyChecking=no ubuntu@{} -t "sudo chmod +x master_script_3.sh && sudo ./master_script_3.sh"'.format(key, hadoop_pub_lst[0]))
 
 # send ip.txt to master node (in /user/hadoop)
-os.system('scp -i {} -o StrictHostKeyChecking=no ./terraform-group08/ip.txt ubuntu@{}:/user/hadoop/ip.txt'.format(key,hadoop_pub_lst[0]))
+os.system('scp -i {} -o StrictHostKeyChecking=no ./terraform-group08/ip.txt ubuntu@{}:/home/ubuntu/ip.txt'.format(key,hadoop_pub_lst[0]))
 
 
 
