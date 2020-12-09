@@ -146,7 +146,7 @@ if __name__ == "__main__":
 
         mongo_db_address = "mongodb://{}/meta.newmetadata".format(mongo_ip)
         spark = SparkSession.builder.master("local[*]").config("spark.mongodb.input.uri", mongo_db_address).config("spark.mongodb.output.uri", mongo_db_address).getOrCreate()
-        df_reviews = load_data("/user/hadoop/reviews.csv")
+        df_reviews = load_data("/home/hadoop/reviews/reviews.csv")
         df_meta = spark.read.format("mongo").load()
 
         # Local =====
