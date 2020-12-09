@@ -17,6 +17,7 @@ os.system('scp -i {} -o StrictHostKeyChecking=no ../scripts/load_reviews_ec2.sql
 os.system('scp -i {} -o StrictHostKeyChecking=no mysql.conf ubuntu@{}:/home/ubuntu/mysql.conf'.format(key, sql_ip))
 os.system('scp -i {} -o StrictHostKeyChecking=no sql_setup.sh ubuntu@{}:/home/ubuntu/sql_setup.sh'.format(key, sql_ip))
 os.system('ssh -i {} -o StrictHostKeyChecking=no ubuntu@{} -t "sudo chmod +x sql_setup.sh"'.format(key, sql_ip))
+os.system('scp -i {} -o StrictHostKeyChecking=no ./terraform_group08/ip.txt ubuntu@{}:/home/ubuntu/ip.txt'.format(key, sql_ip))
 #os.system('ssh -i {} -o StrictHostKeyChecking=no ubuntu@{} -n -t "sudo nohup ./sql_setup.sh > /dev/null 2>&1 &"'.format(key, sql_ip))
 os.system('ssh -i {} -o StrictHostKeyChecking=no ubuntu@{} -t "sudo ./sql_setup.sh"'.format(key, sql_ip))
 
