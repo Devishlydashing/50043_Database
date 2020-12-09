@@ -1,4 +1,4 @@
-use 50043_DB;
+use 50043_db;
 
 /* create a table for storing user data*/
 drop table if exists users;
