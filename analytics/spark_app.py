@@ -139,7 +139,7 @@ if __name__ == "__main__":
         
         # Production
         with Timer("Retrieve IP address from ip.txt file sent from master ec2"):
-            with open('/home/ip.txt', 'r') as f: 
+            with open('/home/hadoop/ip.txt', 'r') as f: 
                 mongo_ip = f.readlines()
                 mongo_ip = mongo_ip[2].split("=")[1].rstrip('\r\n')
                 mongo_ip = mongo_ip.strip()
