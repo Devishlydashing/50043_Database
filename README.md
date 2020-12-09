@@ -615,3 +615,18 @@ only showing top 20 rows
   - **Code:** 404 <br />
     **Content:** `"data": {}, "message": "Book does not exist so cannot delete metadata"`
 
+
+## Design Improvements
+
+
+#### **Automation**
+  -**Implemented:** Segmentation of the execution process into separate files with respect to nodes and relative order. This is so as to keep order of execution in tack.
+  -**Possible Improvement:** Increase the parallelisation of the automation script. 
+  
+  
+#### **Hadoop configuration**
+  -**Implemented:** Modify the execution scripts on our starting node based on the user input. This is done before spinning up the instances. User will indicate ```n``` instances (```n - 1``` datanodes and ```1``` masternode).
+
+
+#### **Importing Data**
+  -**Possible Improvement:** Getting the data in its entirety from an S3 bucket instead of getting the data row by row using sqoop.
